@@ -23,16 +23,30 @@ const App = (props) => {
     const name = 'Piotr';
     const age = 18;
 
-    setTimeout(
+    const increaseByOne = () => {
+        setCounter(counter + 1);
+    };
+
+    const setToZero = () => {
+        setCounter(0);
+    };
+
+    /* setTimeout(
         () => setCounter(counter + 1),
         1000
-    );
+    ); */
 
     return (
         <div>
             <h1>Greetings</h1>
             <Hello name={name} age={age} />
             <div>{counter}</div>
+            <button onClick={increaseByOne}>
+                plus
+            </button>
+            <button onClick={setToZero}>
+                zero
+            </button>
         </div>
     );
 };
