@@ -18,18 +18,30 @@ const Hello = ({name, age}) => {
     );
 };
 
+const Display = ({counter}) => <div>{counter}</div>;
+
+const Button = ({text, onClick}) => {
+    return (
+        <button onClick={onClick}>
+            {text}
+        </button>
+    );
+};
+
 const App = (props) => {
     const [counter, setCounter] = useState(0);
     const name = 'Piotr';
     const age = 18;
 
-    const increaseByOne = () => {
+    const setToValue = (v) => () => setCounter(v);
+
+    /* const increaseByOne = () => {
         setCounter(counter + 1);
     };
 
     const setToZero = () => {
         setCounter(0);
-    };
+    }; */
 
     /* setTimeout(
         () => setCounter(counter + 1),
@@ -40,17 +52,12 @@ const App = (props) => {
         <div>
             <h1>Greetings</h1>
             <Hello name={name} age={age} />
-            <div>{counter}</div>
-            <button onClick={increaseByOne}>
-                plus
-            </button>
-            <button onClick={setToZero}>
-                zero
-            </button>
+            <Display counter={counter} />
+            <Button text='plus' onClick={setToValue(counter + 1)} />
+            <Button text='minus' onClick={setToValue(counter - 1)} />
+            <Button text='zero' onClick={setToValue(0)} />
         </div>
     );
 };
 
-let counter = 1;
-
-ReactDOM.render(<App counter={counter} />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
