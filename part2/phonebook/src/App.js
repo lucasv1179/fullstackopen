@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Persons from './components/Persons';
 import PersonsForm from './components/PersonsForm';
 import Filter from './components/Filter';
+import './App.css';
 
 const App = () => {
 
