@@ -1,8 +1,15 @@
 import React from 'react';
 
-const Note = ({note}) => {
+const Note = ({note, handleToggleImportance}) => {
+    const label = note.important
+        ? 'make not important'
+        : 'make important';
+
     return (
-        <li>{note.content}</li>
+        <li>
+            {note.content}
+            <button style={{margin: "0 .5rem"}} onClick={handleToggleImportance}>{label}</button>    
+        </li>
     );
 }
 

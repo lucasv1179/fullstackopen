@@ -1,7 +1,7 @@
 import React from 'react';
 import Country from './Country';
 
-const Countries = ({ data, query, setQuery }) => {
+const Countries = ({ data, query, setQuery, weatherData, setWeatherData }) => {
     const handleClick = (event) => {
         setQuery(event.target.name);
     };
@@ -28,7 +28,7 @@ const Countries = ({ data, query, setQuery }) => {
             );
         } else if (filteredData.length > 0){
             return (
-                <Country data={filteredData} />
+                <Country data={filteredData} weatherData={weatherData} setWeatherData={setWeatherData} />
             );
         }
     };

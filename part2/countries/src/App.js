@@ -6,6 +6,7 @@ import Countries from './components/Countries';
 
 function App() {
     const [countryData, setCountryData] = useState([]);
+    const [weatherData, setWeatherData] = useState({});
     const [query, setQuery] = useState('');
     useEffect(() => {
         axios
@@ -23,7 +24,7 @@ function App() {
     return (
         <div>
             <Search handleQueryInput={handleQueryInput} query={query} />
-            <Countries data={countryData} query={query} setQuery={setQuery} />
+            <Countries data={countryData} query={query} setQuery={setQuery} weatherData={weatherData} setWeatherData={setWeatherData} />
         </div>
     );
 }

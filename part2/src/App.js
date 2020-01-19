@@ -1,20 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import noteService from './services/notes';
 import Note from './components/Note';
 
 const App = () => {
 
     const [notes, setNotes] = useState([]);
-    const [newNote, setNewNote] = useState('');
+    const [noteInput, setNoteInput] = useState('');
     const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
         console.log('effect');
-        axios
-            .get('http://localhost:3001/notes')
-            .then(res => {
+        const fakenote = {
+            "content": "I'm fake",
+            "date": "2020-01-17T18:22:13.090Z",
+            "important": false,
+            "id": 1000
+          }
+        noteService
+            .getAll()
+            .then(notes => {
                 console.log('promise fulfilled');
-                setNotes(res.data);
+                setNotes([...notes, fakenote]);
             });
     }, []);
     console.log('render', notes.length, 'notes');
@@ -24,26 +30,50 @@ const App = () => {
         : notes.filter(note => note.important);
     
     const rows = () => notesToShow.map(note =>
-        <Note key={note.id} note={note} />
+            <Note
+                key={note.id}
+                note={note}
+                handleToggleImportance={handleToggleImportance(note.id)}
+            />
         );
 
     const addNote = (event) => {
         const note = {
-            id: notes.length + 1,
-            content: newNote,
-            date: new Date().toISOString(),
+            content: noteInput,
+            date: new Date(),
             important: Math.random() > 0.5
         };
 
         event.preventDefault();
-        setNotes([...notes, note]);
-        setNewNote('');
-        console.log('button clicked', event.target);
+
+        noteService
+            .create(note)
+            .then(addedNote => {
+                setNotes([...notes, addedNote]);
+                setNoteInput('');
+            });
+        // setNotes([...notes, note]);
+        // setNoteInput('');
+        // console.log('button clicked', event.target);
+    };
+
+    const handleToggleImportance = (id) => () => {
+        const noteToUpdate = notes.find(note => note.id === id);
+
+        noteService
+            .update({...noteToUpdate, important: !noteToUpdate.important})
+            .then(updatedNote => {
+                setNotes(notes.map(n => n.id === id ? updatedNote : n));
+            })
+            .catch(error => {
+                alert(`the note '${noteToUpdate.content}' was already deleted from the server`);
+                setNotes(notes.filter(n => n.id !== id));
+            });
     };
 
     const handleNoteChange = (event) => {
         console.log(event.target.value);
-        setNewNote(event.target.value);
+        setNoteInput(event.target.value);
     };
 
     return (
@@ -58,7 +88,7 @@ const App = () => {
                 {rows()}
             </ul>
             <form onSubmit={addNote}>
-                <input value={newNote} onChange={handleNoteChange} />
+                <input value={noteInput} onChange={handleNoteChange} />
                 <button type='submit'>save</button>
             </form>
         </div>

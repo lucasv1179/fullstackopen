@@ -1,7 +1,7 @@
 import React from 'react';
 import Person from './Person';
 
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, handlePersonDelete }) => {
     const renderPersons = () => {
         return persons
             .filter(person =>
@@ -10,7 +10,7 @@ const Persons = ({ persons, filter }) => {
                     .includes(filter.toLowerCase())
             )
             .map(person =>
-                <Person key={person.name} person={person} />
+                <Person key={person.name} handlePersonDelete={handlePersonDelete} person={person} />
             );
     };
 

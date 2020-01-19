@@ -1,15 +1,15 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import axios from 'axios';
 
-const Country = ({data}) => {
-    const [weatherData, setWeatherData] = useState({});
+const Country = ({data, weatherData, setWeatherData}) => {
     useEffect(() => {
         axios
             .get(`http://api.weatherstack.com/current?access_key=1cb2852294c9f0bc20bf6c0876892298&query=${data[0].capital}`)
             .then(res => {
+                console.log(res.data);
                 setWeatherData(res.data);
             });
-    }, [data]);
+    }, [data, setWeatherData]);
 
     const renderCountry = () => {
         return (
@@ -19,6 +19,8 @@ const Country = ({data}) => {
                         <h2>{country.name}</h2>
                         <p>
                             capital {country.capital}
+                        </p>
+                        <p>
                             population {country.population}
                         </p>
                         <h3>languages</h3>
