@@ -6,7 +6,7 @@ const Note = ({note, handleToggleImportance}) => {
         : 'make important';
 
     return (
-        <li>
+        <li className='note'>
             {note.content}
             <button style={{margin: "0 .5rem"}} onClick={handleToggleImportance}>{label}</button>    
         </li>
