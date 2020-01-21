@@ -32,6 +32,21 @@ form div {
   margin: 1em 0;
 }
 
+.notification {
+  background-color: lightgray;
+  color: green;
+  font-size: 18px;
+  font-weight: 800;
+  border: 2px solid green;
+  padding: 10px;
+  margin-bottom: 15px;;
+}
+
+.error {
+  color: red;
+  border-color: red;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

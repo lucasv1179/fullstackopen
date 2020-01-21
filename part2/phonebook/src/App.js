@@ -3,6 +3,7 @@ import personsService from './services/persons';
 import Persons from './components/Persons';
 import PersonsForm from './components/PersonsForm';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 import './App.css';
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [filter, setFilter] = useState('');
+    const [notification, setNotification] = useState({});
 
     useEffect(() => {
         personsService
@@ -37,6 +39,10 @@ const App = () => {
                 .addPerson(newPerson)
                 .then(addedPerson => {
                     setPersons([...persons, addedPerson]);
+                    setNotification({type: 'notification', message: `Added ${addedPerson.name}`});
+                    setTimeout(() => {
+                        setNotification({});
+                    }, 5000);
                 });
         } else {
             const repeatedPerson = persons.find(person => person.name === newName);
@@ -53,6 +59,10 @@ const App = () => {
                                     : updatedPerson;
                                 });
                             setPersons(updatedPersons);
+                            setNotification({type: 'notification', message: `Updated ${updatedPerson.name}'s number`});
+                            setTimeout(() => {
+                                setNotification({});
+                            }, 5000);
                         });
                 }
             } else {
@@ -72,9 +82,25 @@ const App = () => {
                         const modifiedPersons = persons
                             .filter(person => person.id !== id);
                         setPersons(modifiedPersons);
-                        console.log('Successfully deleted person')
+                        setNotification({type: 'notification', message: `Successfully deleted entry`});
+                        console.log('Successfully deleted entry')
                     } else {
-                        console.log('Could not delete person');
+                        setNotification({type: 'error', message: 'Could not delete entry'})
+                        console.log('Could not delete entry');
+                    }
+                    setTimeout(() => {
+                        setNotification({});
+                    }, 5000);
+                })
+                .catch(error => {
+                    if (error.response.status === 404) {
+                        const modifiedPersons = persons
+                            .filter(person => person.id !== id);
+                        setPersons(modifiedPersons);
+                        setNotification({type: 'error', message: 'Entry already removed from phonebook'});
+                        setTimeout(() => {
+                            setNotification({});
+                        }, 5000);
                     }
                 });
         }
@@ -87,6 +113,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification notification={notification} />
             <Filter filter={filter} handleFilterInput={handleFilterInput} />
             <h2>Add new</h2>
             <PersonsForm
