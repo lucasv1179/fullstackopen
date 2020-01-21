@@ -1,0 +1,14 @@
+//GET ALL
+# GET http://localhost:3001/api/persons
+
+//DELETE
+# DELETE http://localhost:3001/api/persons/4
+
+//POST
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "James McAvoy",
+    "number": "040-893234"
+}
