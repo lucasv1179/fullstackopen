@@ -8,6 +8,7 @@ const requestLogger = (request, response, next) => { //Custom middleware
     console.log('---');
     next();
 };
+const cors = require('cors');
 
 let notes = [
     {
@@ -35,7 +36,7 @@ let notes = [
     res.end(JSON.stringify(notes));
 }); */
 const app = express();
-app.use(bodyParser.json(), requestLogger);
+app.use(bodyParser.json(), requestLogger, cors());
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello Node.js!</h1>');
@@ -91,9 +92,9 @@ const unknownEndpoint = (request, response, next) => { //Custom middleware
 
 app.use(unknownEndpoint);
 
-const port = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.listen(port, () => {
+app.listen(PORT, () => {
     console.log(`Server running on port ${port}`);
 });
 
