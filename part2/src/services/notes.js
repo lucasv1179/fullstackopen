@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = 'http://localhost:3001/notes';
+const baseURL = 'https://calm-reaches-23102.herokuapp.com/notes'//'http://localhost:3001/notes';
 
 const getAll = () => {
     return axios
