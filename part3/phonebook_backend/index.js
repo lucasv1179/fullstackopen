@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const {requestLogger, unknownEndpoint} = require('./customMiddleware/middleware');
+//TODO implement 'morgan' logging middleware
 
 const app = express();
 const PORT = 3001;
 
-app.use(bodyParser.json());
+app.use(bodyParser.json(), requestLogger);
 
 let persons = [
     {
@@ -48,27 +50,27 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const body = req.body;
-    const reject = {};
+    const rejectReason = '';
 
     if (!body.name && !body.number) {
-        reject.reason = 'name and number are missing';
+        rejectReason = 'name and number are missing';
     } else if (!body.name) {
-        reject.reason = 'name is missing';
+        rejectReason = 'name is missing';
     } else if (!body.number) {
-        reject.reason = 'number is missing';
+        rejectReason = 'number is missing';
     } else {
         const isNameInPhonebook = persons.some(person => person.name === body.name);
         if (isNameInPhonebook) {
-            reject.reason = 'name must be unique';
+            rejectReason = 'name must be unique';
         }
     }
 
-    if (reject.reason) {
+    if (rejectReason) {
         return res.status(400).json({
-            error: reject.reason
+            error: rejectReason
         });
     }
-    
+
     const person = {
         id: createID(),
         name: body.name,
@@ -103,6 +105,8 @@ app.get('/info', (req, res) => {
     `;
     res.send(responseBody);
 });
+
+app.use(unknownEndpoint);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

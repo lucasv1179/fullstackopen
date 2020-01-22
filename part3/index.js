@@ -1,6 +1,13 @@
 //const http = require('http');
 const express = require('express'); //Replaced Node's built-in http module with express
 const bodyParser = require('body-parser'); //Express library
+const requestLogger = (request, response, next) => { //Custom middleware
+    console.log('Method:', request.method);
+    console.log('Path:', request.path);
+    console.log('Body:', request.body);
+    console.log('---');
+    next();
+};
 
 let notes = [
     {
@@ -28,7 +35,7 @@ let notes = [
     res.end(JSON.stringify(notes));
 }); */
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json(), requestLogger);
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello Node.js!</h1>');
@@ -75,6 +82,14 @@ app.delete('/notes/:id', (req, res) => {
     notes = notes.filter(note => note.id !== id);
     res.status(204).end();
 });
+
+const unknownEndpoint = (request, response, next) => { //Custom middleware
+    response.status(404).send({
+        error: 'unknown endpoint'
+    })
+};
+
+app.use(unknownEndpoint);
 
 const port = 3001;
 
