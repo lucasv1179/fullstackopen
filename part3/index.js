@@ -36,17 +36,17 @@ let notes = [
     res.end(JSON.stringify(notes));
 }); */
 const app = express();
-app.use(bodyParser.json(), requestLogger, cors());
+app.use(express.static('build'), bodyParser.json(), requestLogger, cors());
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello Node.js!</h1>');
 });
 
-app.get('/notes', (req, res) => {
+app.get('/api/notes', (req, res) => {
     res.json(notes);
 });
 
-app.get('/notes/:id', (req, res) => {
+app.get('/api/notes/:id', (req, res) => {
     const id = Number(req.params.id);
     const note = notes.find(note => note.id === id);
     if (note) {
@@ -56,7 +56,7 @@ app.get('/notes/:id', (req, res) => {
     }
 });
 
-app.post('/notes', (req, res) => {
+app.post('/api/notes', (req, res) => {
     const body = req.body;
     console.log(body);
 
@@ -78,7 +78,7 @@ app.post('/notes', (req, res) => {
     res.json(note);
 });
 
-app.delete('/notes/:id', (req, res) => {
+app.delete('/api/notes/:id', (req, res) => {
     const id = Number(req.params.id);
     notes = notes.filter(note => note.id !== id);
     res.status(204).end();
@@ -95,7 +95,7 @@ app.use(unknownEndpoint);
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${PORT}`);
 });
 
 function generateId() {
